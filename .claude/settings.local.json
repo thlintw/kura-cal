@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cd d:\\\\dev\\\\kura-cal && pnpm dev 2>&1 &)",
+      "PowerShell(cd d:\\\\dev\\\\kura-cal && Start-Process pwsh -ArgumentList '-NoExit', '-Command', 'pnpm dev' -WindowStyle Normal)",
+      "PowerShell(Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5)",
+      "PowerShell(Get-ChildItem -Recurse -Exclude node_modules,.git | Where-Object { !$_.FullName.Contains\\('node_modules'\\) -and !$_.FullName.Contains\\('.git'\\) } | Select-Object FullName | Sort-Object FullName)",
+      "PowerShell(Get-ChildItem -Path d:\\\\dev\\\\kura-cal -Recurse | Where-Object { $_.FullName -notmatch 'node_modules|\\\\.git|pnpm-lock' } | ForEach-Object { $_.FullName.Replace\\('D:\\\\dev\\\\kura-cal\\\\', ''\\) })"
+    ]
+  }
+}
