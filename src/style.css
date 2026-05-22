@@ -4,3 +4,11 @@
   --color-kura: #dc2626;
   --color-kura-light: #fef2f2;
 }
+
+/* Hide native browser search clear button */
+.search-input::-webkit-search-cancel-button {
+  display: none;
+}
+.search-input::-ms-clear {
+  display: none;
+}

@@ -6,13 +6,15 @@
                 <!-- Title row -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <span class="text-2xl">🍣</span>
+                        <img src="/assets/images/logo.svg" alt="KuraCal" class="h-10 w-10" />
                         <h1 class="text-xl font-bold tracking-tight text-zinc-900">KuraCal</h1>
                     </div>
                     <button v-if="selectedCount > 0" type="button"
-                        class="rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors active:bg-zinc-200"
+                        class="rounded-lg px-2 py-1 text-xs font-medium transition-colors active:bg-zinc-200
+                            flex items-center gap-2 text-red-600 border-2 border-red-600 bg-red-100"
                         @click="clearAll">
-                        清除 ({{ selectedCount }})
+                        <div>已選 {{ selectedCount }} 盤，清除</div>
+                        <Trash2 :size="20" />
                     </button>
                 </div>
 
@@ -26,7 +28,16 @@
                     <Search class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
                         :size="16" />
                     <input v-model="search" type="search" placeholder="搜尋料理..."
-                        class="w-full rounded-xl bg-white py-2.5 pl-9 pr-4 text-sm text-zinc-800 shadow-sm border-2 border-zinc-200 placeholder:text-zinc-400 focus:outline-none focus:border-2 focus:border-red-500" />
+                        class="search-input w-full rounded-xl bg-white py-2.5 pl-9 pr-9 text-sm text-zinc-800 shadow-sm border-2 border-zinc-200 placeholder:text-zinc-400 focus:outline-none focus:border-2 focus:border-red-500" />
+                    <button
+                        v-if="search"
+                        type="button"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center p-1 text-zinc-400 hover:text-zinc-600"
+                        @click="search = ''"
+                        aria-label="清除搜尋"
+                    >
+                        <X :size="16" :stroke-width="5" class="text-black" />
+                    </button>
                 </div>
 
                 <!-- Active filter pill -->
@@ -35,8 +46,8 @@
                     <span
                         class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-0.5 text-sm font-medium text-red-700">
                         {{ activeFilter }}
-                        <button type="button" @click="activeFilter = null" aria-label="清除篩選">
-                            <X :size="12" />
+                        <button type="button" class="flex items-center justify-center p-1" @click="activeFilter = null" aria-label="清除篩選">
+                            <X :size="14" />
                         </button>
                     </span>
                 </div>
@@ -63,7 +74,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import { Search, X } from '@lucide/vue'
+import { Search, Trash2, X } from '@lucide/vue'
 import { dishes } from './data/dishes'
 import MacroWidgets from './components/MacroWidgets.vue'
 import DishItem from './components/DishItem.vue'
@@ -94,7 +105,11 @@ const filteredDishes = computed(() => {
         const rx = new RegExp(activeFilter.value)
         list = list.filter((d) => rx.test(d.name))
     }
-    return list
+    return [...list].sort((a, b) => {
+        const aSelected = (selections.value[a.id] ?? 0) > 0 ? 0 : 1
+        const bSelected = (selections.value[b.id] ?? 0) > 0 ? 0 : 1
+        return aSelected - bSelected
+    })
 })
 
 const totals = computed(() => {
