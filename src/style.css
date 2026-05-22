@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --color-kura: #dc2626;
+  --color-kura-light: #fef2f2;
+}
