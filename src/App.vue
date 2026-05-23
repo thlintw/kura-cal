@@ -1,8 +1,8 @@
 <template>
     <div class="min-h-screen bg-zinc-50">
         <!-- Sticky header -->
-        <header class="sticky top-0 z-10 bg-zinc-50/90 backdrop-blur-sm">
-            <div class="mx-auto max-w-2xl px-4 pt-5 pb-3">
+        <header class="sticky top-0 z-10 bg-zinc-50/90 backdrop-blur-xs">
+            <div class="mx-auto max-w-2xl px-4 pt-5 pb-5">
                 <!-- Title row -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -68,13 +68,26 @@
 
         <!-- Floating filter menu -->
         <FilterMenu :active-filter="activeFilter" @set-filter="(kw) => activeFilter = kw" />
+
+        <!-- Scroll to top -->
+        <Transition name="fade">
+            <button
+                v-if="scrolled"
+                type="button"
+                class="fixed bottom-6 left-20 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-white text-zinc-700 shadow-lg border-2 border-zinc-200 transition-colors active:bg-zinc-100"
+                @click="scrollToTop"
+                aria-label="回到頂部"
+            >
+                <ChevronUp :size="20" />
+            </button>
+        </Transition>
     </div>
 </template>
 
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import { Search, Trash2, X } from '@lucide/vue'
+import { ChevronUp, Search, Trash2, X } from '@lucide/vue'
 import { dishes } from './data/dishes'
 import MacroWidgets from './components/MacroWidgets.vue'
 import DishItem from './components/DishItem.vue'
@@ -86,11 +99,17 @@ const selections = ref<Record<number, number>>({})
 const search = ref('')
 const activeFilter = ref<string | null>(null)
 
+const scrolled = ref(false)
+
 onMounted(() => {
     try {
         const saved = localStorage.getItem(STORAGE_KEY)
         if (saved) selections.value = JSON.parse(saved)
     } catch { }
+
+    window.addEventListener('scroll', () => {
+        scrolled.value = window.scrollY > 100
+    }, { passive: true })
 })
 
 watch(selections, (val) => {
@@ -152,4 +171,19 @@ function setQty(id: number, qty: number) {
 function clearAll() {
     selections.value = {}
 }
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>

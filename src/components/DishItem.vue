@@ -18,10 +18,10 @@
                     <div>{{ dish.name }}</div>
                     <div class="text-sm font-bold" :class="calClass">{{ dish.kcal }} kcal</div>
                 </p>
-                <p class="text-xs text-zinc-500 flex items-center gap-0.5">
-                    <div>蛋白質 {{ dish.protein }}g</div>
-                    <div>碳水 {{ dish.carb }}g</div>
-                    <div>脂肪 {{ dish.fat }}g</div>
+                <p class="text-xs text-zinc-500 flex items-center gap-1">
+                    <div>蛋白質{{ dish.protein }}g</div>
+                    <div>碳水{{ dish.carb }}g</div>
+                    <div>脂肪{{ dish.fat }}g</div>
                 </p>
             </div>
         </div>

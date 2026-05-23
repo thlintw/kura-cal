@@ -8,7 +8,7 @@
     />
   </Transition>
 
-    <div class="fixed bottom-6 left-4 z-30 flex flex-col items-start gap-2">
+    <div class="fixed bottom-6 left-6 z-30 flex flex-col items-start gap-2">
         <!-- Filter panel -->
         <Transition name="slide-up">
             <div v-if="open" class="mb-1 w-9/12 rounded-2xl bg-white p-4 shadow-xl ring-1 ring-zinc-200">
